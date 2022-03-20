@@ -51,8 +51,11 @@ span.block.new       { color: white; background-color: #ad4ef0; }
 span.block.orphan    { color: white; background-color: #d9534f; }
 span.block.immature  { color: white; background-color: #f0ad4e; }
 span.block.confirmed { color: white; background-color: #5cb85c; }
+<<<<<<< HEAD
 span.solo	{ padding: 2px; display: inline-block; text-align: center; min-width: 15px; border-radius: 3px; color: white; background-color: #48D8D8; }
 
+=======
+>>>>>>> upstream/segwit
 b.row a { font-size: 10pt; }
 .ssrow td.row { font-size: .8em; }
 td.right { text-align: right; }
@@ -106,6 +109,18 @@ foreach($db_blocks as $db_block)
 	$link = $coin->createExplorerLink($coin->name, array('hash'=>$db_block->blockhash));
 
 	$flags = $db_block->segwit ? '&nbsp;<img src="/images/ui/segwit.png" height="8px" valign="center" title="segwit"/>' : '';
+<<<<<<< HEAD
+=======
+
+	echo '<tr class="ssrow">';
+	echo '<td width="18px"><img width="16px" src="'.$coin->image.'"></td>';
+	echo '<td class="row"><b class="row">'.$link.'</b> ('.$coin->algo.')'.$flags.'</td>';
+	echo '<td class="row right"><b>'.$reward.' '.$coin->symbol_show.'</b></td>';
+	echo '<td class="row right" title="found '.$db_block->difficulty_user.'">'.$difficulty.'</td>';
+	echo '<td class="row right">'.$height.'</td>';
+	echo '<td class="row right">'.$d.' ago</td>';
+	echo '<td class="row right">';
+>>>>>>> upstream/segwit
 
 	echo '<tr class="ssrow">';
 	echo '<td width="18px"><img width="16px" src="'.$coin->image.'"></td>';

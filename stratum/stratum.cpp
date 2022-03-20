@@ -41,6 +41,7 @@ int g_stratum_max_ttf;
 int g_stratum_max_cons = 5000;
 bool g_stratum_reconnect;
 bool g_stratum_renting;
+<<<<<<< HEAD
 bool g_stratum_segwit = false;
 
 int g_limit_txs_per_block = 0;
@@ -55,6 +56,9 @@ bool g_debuglog_rpc;
 bool g_debuglog_list;
 bool g_debuglog_remote;
 
+=======
+bool g_stratum_segwit;
+>>>>>>> upstream/segwit
 bool g_autoexchange = true;
 
 uint64_t g_max_shares = 0;
@@ -318,6 +322,7 @@ int main(int argc, char **argv)
 	g_stratum_max_ttf = iniparser_getint(ini, "STRATUM:max_ttf", 0x70000000);
 	g_stratum_reconnect = iniparser_getint(ini, "STRATUM:reconnect", true);
 	g_stratum_renting = iniparser_getint(ini, "STRATUM:renting", true);
+<<<<<<< HEAD
 	g_handle_haproxy_ips = iniparser_getint(ini, "STRATUM:haproxy_ips", g_handle_haproxy_ips);
 	g_socket_recv_timeout = iniparser_getint(ini, "STRATUM:recv_timeout", 600);
 
@@ -330,6 +335,9 @@ int main(int argc, char **argv)
 	g_debuglog_rpc = iniparser_getint(ini, "DEBUGLOG:rpc", false);
 	g_debuglog_list = iniparser_getint(ini, "DEBUGLOG:list", false);
 	g_debuglog_remote = iniparser_getint(ini, "DEBUGLOG:remote", false);
+=======
+	g_stratum_segwit = iniparser_getint(ini, "STRATUM:segwit", 0);
+>>>>>>> upstream/segwit
 
 	iniparser_freedict(ini);
 

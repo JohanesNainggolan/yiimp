@@ -95,6 +95,7 @@ extern int g_stratum_max_ttf;
 extern bool g_stratum_reconnect;
 extern bool g_stratum_renting;
 extern bool g_stratum_segwit;
+<<<<<<< HEAD
 extern int g_limit_txs_per_block;
 
 extern bool g_handle_haproxy_ips;
@@ -106,6 +107,8 @@ extern bool g_debuglog_socket;
 extern bool g_debuglog_rpc;
 extern bool g_debuglog_list;
 extern bool g_debuglog_remote;
+=======
+>>>>>>> upstream/segwit
 
 extern uint64_t g_max_shares;
 extern uint64_t g_shares_counter;
