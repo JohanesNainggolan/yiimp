@@ -320,6 +320,7 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 		flags = NULL;
 	
 	strcpy(templ->flags, flags ? flags : "");
+	strcpy(templ->priceinfo, "");
 
 	// LBC Claim Tree (with wallet gbt patch)
 	const char *claim = json_get_string(json_result, "claimtrie");
@@ -343,6 +344,13 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 		if (claim) {
 			strcpy(templ->claim_hex, claim);
 			debuglog("claim_hex: %s\n", templ->claim_hex);
+		}
+	}
+	else if (strcmp(coind->symbol, "BITC") == 0) {
+		if (strlen(json_get_string(json_result, "priceinfo")) < 1000) {
+			templ->needpriceinfo = json_get_bool(json_result, "needpriceinfo");
+            if (templ->needpriceinfo)
+				strcpy(templ->priceinfo, json_get_string(json_result, "priceinfo"));
 		}
 	}
 
@@ -406,22 +414,31 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 	vector<string> txids;
 	txhashes.push_back("");
 	txids.push_back("");
+<<<<<<< HEAD
 
 	templ->has_segwit_txs = false;
 
 	templ->has_filtered_txs = false;
 	templ->filtered_txs_fee = 0;
+=======
+>>>>>>> upstream/segwit
 
+	templ->has_segwit_txs = false;
+	// to force/test
+	// templ->has_segwit_txs = coind->usesegwit = (coind->usesegwit || g_stratum_segwit);
 	for(int i = 0; i < json_tx->u.array.length; i++)
 	{
 		const char *p = json_get_string(json_tx->u.array.values[i], "hash");
 		char hash_be[256] = { 0 };
+<<<<<<< HEAD
 
 		if (templ->has_filtered_txs) {
 			templ->filtered_txs_fee += json_get_int(json_tx->u.array.values[i], "fee");
 			continue;
 		}
 
+=======
+>>>>>>> upstream/segwit
 		string_be(p, hash_be);
 		txhashes.push_back(hash_be);
 
@@ -431,6 +448,10 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 			string_be(txid, txid_be);
 			txids.push_back(txid_be);
 			if (strcmp(hash_be, txid_be)) {
+<<<<<<< HEAD
+=======
+				//debuglog("%s segwit tx found, height %d\n", coind->symbol, templ->height);
+>>>>>>> upstream/segwit
 				templ->has_segwit_txs = true; // if not, its useless to generate a segwit block, bigger
 			}
 		} else {
@@ -491,6 +512,48 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	templ->txmerkles[0] = '\0';
+	if(templ->has_segwit_txs) {
+		templ->txcount = txids.size();
+		templ->txsteps = merkle_steps(txids);
+	} else {
+		templ->txcount = txhashes.size();
+		templ->txsteps = merkle_steps(txhashes);
+	}
+
+	if(templ->has_segwit_txs) {
+		// * We compute the witness hash (which is the hash including witnesses) of all the block's transactions, except the
+		//   coinbase (where 0x0000....0000 is used instead).
+		// * The coinbase scriptWitness is a stack of a single 32-byte vector, containing a witness nonce (unconstrained).
+		// * We build a merkle tree with all those witness hashes as leaves (similar to the hashMerkleRoot in the block header).
+		// * There must be at least one output whose scriptPubKey is a single 36-byte push, the first 4 bytes (magic) of which are
+		//   {0xaa, 0x21, 0xa9, 0xed}, and the following 32 bytes are SHA256^2(witness root, witness nonce). In case there are
+		/*
+		char bin[YAAMP_HASHLEN_BIN*2];
+		char witness[128] = { 0 };
+		vector<string> mt_verify = merkle_steps(txhashes);
+		string witness_mt = merkle_with_first(mt_verify, "0000000000000000000000000000000000000000000000000000000000000000");
+		mt_verify.clear();
+		witness_mt = witness_mt + "0000000000000000000000000000000000000000000000000000000000000000";
+
+		binlify((unsigned char *)bin, witness_mt.c_str());
+		sha256_double_hash_hex(bin, witness, YAAMP_HASHLEN_BIN*2);
+
+		int clen = (int) (strlen(coind->witness_magic) + strlen(witness)); // 4 + 32 = 36 = 0x24
+		sprintf(coind->commitment, "6a%02x%s%s", clen/2, coind->witness_magic, witness);
+		*/
+		// default commitment is already computed correctly
+		const char *commitment = json_get_string(json_result, "default_witness_commitment");
+		if (commitment) {
+			sprintf(coind->commitment, "%s", commitment);
+		} else {
+			templ->has_segwit_txs = false;
+		}
+	}
+
+>>>>>>> upstream/segwit
 	txhashes.clear();
 	txids.clear();
 

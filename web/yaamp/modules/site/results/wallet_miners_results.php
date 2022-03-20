@@ -62,7 +62,18 @@ foreach(yaamp_get_algos() as $algo)
 	echo '<tr class="ssrow">';
 	echo '<td><b>'.$algo.'</b></td>';
 	echo '<td align="right">'.$minercount.'</td>';
-	echo '<td align="right" width="100">'.$percent_shares.'%</td>';
+	
+	$is_solo = getdbocount('db_workers',"algo=:algo and userid=:userid and password like '%m=solo%'", 
+			array(':algo'=>$algo,':userid'=>$userid));
+	
+	if($is_solo)
+	{
+		echo '<td align="right" width="100"><span class="solo label">Solo</span></td>';
+	}
+	else
+	{
+		echo '<td align="right" width="100">'.$percent_shares.'%</td>';
+	}
 	echo '<td align="right" width="100"><b>'.$user_rate1.'</b></td>';
 	echo '<td align="right">'.$percent_bad.'</td>';
 	echo '</tr>';
@@ -104,13 +115,13 @@ if(count($workers))
 
 		$version = substr($worker->version, 0, 20);
 		$password = substr($worker->password, 0, 32);
-		if (empty($password) && !empty($worker->worker))
-			$password = substr($worker->worker, 0, 32);
+		
+		$name = $worker->worker;
 
 		$subscribe = Booltoa($worker->subscribe);
 
 		echo '<tr class="ssrow">';
-		echo '<td title="'.$worker->version.'">'.$version.'</td>';
+		echo '<td title="'.$worker->version.'"><b>Version:</b> '.$version.' <br> <b>Worker Name:</b> '.$name.' </td>';
 		if ($this->admin) echo "<td>{$worker->ip}</td>";
 		echo '<td title="'.$worker->password.'">'.$password.'</td>';
 		echo '<td>'.$worker->algo.'</td>';
