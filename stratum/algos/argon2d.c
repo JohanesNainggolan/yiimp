@@ -8,6 +8,7 @@
 #include "ar2/argon2.h"
 #include "ar2/core.h"
 
+<<<<<<< HEAD
 static const size_t INPUT_BYTES = 80;  // Lenth of a block header in bytes. Input Length = Salt Length (salt = input)
 static const size_t OUTPUT_BYTES = 32; // Length of output needed for a 256-bit hash
 static const unsigned int DEFAULT_ARGON2_FLAG = 2; //Same as ARGON2_DEFAULT_FLAGS
@@ -99,5 +100,10 @@ void argon2d_dyn_hash(const unsigned char* input, unsigned char* output, unsigne
 void argon2d16000_hash(const unsigned char* input, unsigned char* output, unsigned int len)
 {
 	argon2d16000_call(input, output);
+=======
+void argon2d_uis_hash(const unsigned char* input, unsigned char* output, unsigned int len)
+{
+	argon2d_hash_raw(1, 4096, 1, input, 80, input, 80, output, 32);
+>>>>>>> origin/argon2d4096
 }
 
